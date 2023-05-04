@@ -5,7 +5,6 @@ from helper.execute import cartoonize, stylize
 from io import BytesIO
 import os
 from pathlib import Path
-import uvicorn
 
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent
@@ -48,6 +47,3 @@ async def get_image_url(image_name: str):
     image_path = os.path.join("result", image_name)
     return FileResponse(image_path)
 
-
-if __name__ == "__main__":
-    uvicorn.run(app)
