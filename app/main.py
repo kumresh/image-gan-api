@@ -1,7 +1,7 @@
 from fastapi import FastAPI, File
 from PIL import Image
 from fastapi.responses import FileResponse
-from helper.execute import cartoonize, stylize
+from .helper.execute import cartoonize, stylize
 from io import BytesIO
 import os
 from pathlib import Path
