@@ -15,7 +15,7 @@ current_GMT = time.gmtime()
 
 time_stamp = calendar.timegm(current_GMT)
 BASE_DIR = Path(__file__).resolve(strict=True).parent
-
+IMAGE_OUTPUT_DIR = os.path.abspath(os.path.join(BASE_DIR, "..", "result"))
 
 class Transformer(nn.Module):
     def __init__(self):
@@ -357,7 +357,7 @@ def cartoonize(input_image: Image.Image):
 
         vutils.save_image(
             output_image,
-            os.path.join("result",  output_image_name)
+            os.path.join(IMAGE_OUTPUT_DIR,  output_image_name)
         )
         
     return {"response": "ok",
@@ -390,18 +390,7 @@ def stylize(content_image):
     content_image = content_transform(content_image).unsqueeze(0).to(device)
 
     with torch.no_grad():
-
-        # Initialize fast neural style transfer model
-        # if args.model_type == 'ae':
-        #     style_model = Autoencoder()
-        # elif args.model_type == 'bo':
-        #     style_model = BottleNetwork().to(device)
-        # elif args.model_type == 'res':
         style_model = Autoencoder().to(device)
-        # else:
-        #     print('Error: invalid selected architecture')
-        #     sys.exit()
-
         state_dict = torch.load(f"{BASE_DIR}/style_model.pth", map_location=torch.device("cpu"))
         # remove saved deprecated running_* keys in InstanceNorm from the checkpoint
         for k in list(state_dict.keys()):
@@ -415,7 +404,7 @@ def stylize(content_image):
 
         vutils.save_image(
             output,
-            os.path.join("result",  output_image_name)
+            os.path.join(IMAGE_OUTPUT_DIR,  output_image_name)
         )
         
     return {"response": "ok",
