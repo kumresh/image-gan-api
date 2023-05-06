@@ -23,14 +23,14 @@ jobs:
       uses: docker/login-action@v2
       with:
         registry: https://imageganapi.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_ab4d7b2a734e462fbd1305cccaa9d4be }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_1cbd3ffce8dd4dc2a5ce505d1178c06c }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_141d3c6781a442d18b27e7ca42aac6ca }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_032fdb926dbb42ee9233131fd25e5ac6 }}
 
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: imageganapi.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_ab4d7b2a734e462fbd1305cccaa9d4be }}/image-gan-api-app:${{ github.sha }}
+        tags: imageganapi.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_141d3c6781a442d18b27e7ca42aac6ca }}/image-gan-api-app:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -47,5 +47,5 @@ jobs:
       with:
         app-name: 'imageGanApi'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_78dc48db00e245a494ffb0c94db2b4b3 }}
-        images: 'imageganapi.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_ab4d7b2a734e462fbd1305cccaa9d4be }}/image-gan-api-app:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_74185037e918457888c4c2a1e49f9465 }}
+        images: 'imageganapi.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_141d3c6781a442d18b27e7ca42aac6ca }}/image-gan-api-app:${{ github.sha }}'
