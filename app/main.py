@@ -44,6 +44,6 @@ async def style(imageFile: bytes = File(...)):
 
 @app.get("/image/{image_name}")
 async def get_image_url(image_name: str):
-    image_path = os.path.join("result", image_name)
+    image_path = os.path.join(f"{BASE_DIR}/result", image_name)
     return FileResponse(image_path)
 
