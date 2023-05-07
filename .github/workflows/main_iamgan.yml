@@ -1,0 +1,51 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - iamgan
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Log in to registry
+      uses: docker/login-action@v2
+      with:
+        registry: https://iamganapi.azurecr.io/
+        username: ${{ secrets.AzureAppService_ContainerUsername_880a0316b9c34b22ac50e37ad3444317 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_ccb19dfe7b2b478cb7a5d63cb9d0841f }}
+
+    - name: Build and push container image to registry
+      uses: docker/build-push-action@v3
+      with:
+        push: true
+        tags: iamganapi.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_880a0316b9c34b22ac50e37ad3444317 }}/iamganapp:${{ github.sha }}
+        file: ./Dockerfile
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+    - name: Deploy to Azure Web App
+      id: deploy-to-webapp
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'iamgan'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_0622456625f94b4385f0d044f393b9ae }}
+        images: 'iamganapi.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_880a0316b9c34b22ac50e37ad3444317 }}/iamganapp:${{ github.sha }}'
